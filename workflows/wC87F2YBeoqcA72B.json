@@ -1,0 +1,101 @@
+{
+  "active": false,
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-10-12T18:04:36.820Z",
+  "id": "wC87F2YBeoqcA72B",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Newsletter Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": " Inputs",
+        "formDescription": "Describe your idea, opinions, experiences - anything that's relevant and you-nique.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": " ",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Generate Newsletter",
+          "customCss": ":root {\n  /* Font */\n  --font-family: 'Inter', 'Open Sans', Arial, sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 14px;\n  --font-size-label: 15px;\n  --font-size-input: 15px;\n  --font-size-header: 24px;\n  --font-size-subheader: 17px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 14px;\n  --font-size-error: 13px;\n  --font-size-html-h1: 32px;\n  --font-size-html-h2: 24px;\n  --font-size-html-h3: 20px;\n  --font-size-html-h4: 17px;\n  --font-size-html-h5: 15px;\n  --font-size-html-h6: 13px;\n\n  /* Minimalist grayscale palette */\n  --color-background: #fff;\n  --color-card-bg: #fff;\n  --color-card-border: #eaeaea;\n  --color-card-shadow: rgba(0,0,0,0.02);\n  --color-link: #111;\n  --color-header: #111;\n  --color-label: #1a1a1a;\n  --color-input-border: #d0d0d0;\n  --color-input-text: #222;\n  --color-focus-border: #111;\n  --color-submit-btn-bg: #111;\n  --color-submit-btn-text: #fff;\n  --color-error: #111;\n  --color-required: #111;\n  --color-clear-button-bg: #fff;\n  --color-clear-button-border: #d0d0d0;\n  --color-html-text: #1a1a1a;\n  --color-html-link: #111;\n  --color-header-subtext: #757575;\n  --color-placeholder: #b0b0b0;\n\n  /* Border radii */\n  --border-radius-card: 14px;\n  --border-radius-input: 10px;\n  --border-radius-clear-btn: 50%;\n\n  /* Spacing and Layout */\n  --padding-container-top: 32px;\n  --padding-card: 32px;\n  --padding-form-input: 15px;\n  --margin-bottom-card: 22px;\n  --card-padding: 32px;\n  --card-margin-bottom: 22px;\n\n  /* Sizing */\n  --container-width: 420px;\n  --submit-btn-height: 46px;\n  --checkbox-size: 19px;\n\n  /* Shadows and effects */\n  --box-shadow-card: 0 2px 12px 0 var(--color-card-shadow);\n  --opacity-placeholder: 0.6;\n}\n/* Example of sleek minimalist form elements: */\ninput, select, textarea {\n  font-family: var(--font-family);\n  background: #fff;\n  color: var(--color-input-text);\n  border: 1.5px solid var(--color-input-border);\n  border-radius: var(--border-radius-input);\n  padding: var(--padding-form-input);\n  transition: border 0.2s;\n}\n\ninput:focus, select:focus, textarea:focus {\n  border: 1.5px solid var(--color-focus-border);\n  outline: none;\n}\n\nbutton[type=\"submit\"] {\n  background: var(--color-submit-btn-bg);\n  color: var(--color-submit-btn-text);\n  border: none;\n  border-radius: var(--border-radius-input);\n  height: var(--submit-btn-height);\n  font-weight: var(--font-weight-bold);\n  letter-spacing: 0.01em;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n\nbutton[type=\"submit\"]:hover {\n  background: #333;\n}\n\nlabel {\n  color: var(--color-label);\n  font-size: var(--font-size-label);\n  font-weight: var(--font-weight-bold);\n  margin-bottom: 6px;\n  letter-spacing: 0.01em;\n}\n\n.card {\n  background: var(--color-card-bg);\n  border-radius: var(--border-radius-card);\n  box-shadow: var(--box-shadow-card);\n  padding: var(--card-padding);\n  border: 1px solid var(--color-card-border);\n}\n\n::-webkit-input-placeholder { color: var(--color-placeholder); opacity: var(--opacity-placeholder);}\n::-moz-placeholder { color: var(--color-placeholder); opacity: var(--opacity-placeholder);}\n:-ms-input-placeholder { color: var(--color-placeholder); opacity: var(--opacity-placeholder);}\n::placeholder { color: var(--color-placeholder); opacity: var(--opacity-placeholder);}"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -80,
+        -48
+      ],
+      "id": "febd37a3-e2b1-4315-b655-07b9e7a527a2",
+      "name": "On form submission",
+      "webhookId": "cde393ff-4966-43e2-95e6-95bba06da0df"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Word Limit",
+              "fieldType": "number",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "customCss": ":root {\n  /* Font */\n  --font-family: 'Inter', 'Open Sans', Arial, sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 14px;\n  --font-size-label: 15px;\n  --font-size-input: 15px;\n  --font-size-header: 24px;\n  --font-size-subheader: 17px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 14px;\n  --font-size-error: 13px;\n  --font-size-html-h1: 32px;\n  --font-size-html-h2: 24px;\n  --font-size-html-h3: 20px;\n  --font-size-html-h4: 17px;\n  --font-size-html-h5: 15px;\n  --font-size-html-h6: 13px;\n\n  /* Minimalist grayscale palette */\n  --color-background: #fff;\n  --color-card-bg: #fff;\n  --color-card-border: #eaeaea;\n  --color-card-shadow: rgba(0,0,0,0.02);\n  --color-link: #111;\n  --color-header: #111;\n  --color-label: #1a1a1a;\n  --color-input-border: #d0d0d0;\n  --color-input-text: #222;\n  --color-focus-border: #111;\n  --color-submit-btn-bg: #111;\n  --color-submit-btn-text: #fff;\n  --color-error: #111;\n  --color-required: #111;\n  --color-clear-button-bg: #fff;\n  --color-clear-button-border: #d0d0d0;\n  --color-html-text: #1a1a1a;\n  --color-html-link: #111;\n  --color-header-subtext: #757575;\n  --color-placeholder: #b0b0b0;\n\n  /* Border radii */\n  --border-radius-card: 14px;\n  --border-radius-input: 10px;\n  --border-radius-clear-btn: 50%;\n\n  /* Spacing and Layout */\n  --padding-container-top: 32px;\n  --padding-card: 32px;\n  --padding-form-input: 15px;\n  --margin-bottom-card: 22px;\n  --card-padding: 32px;\n  --card-margin-bottom: 22px;\n\n  /* Sizing */\n  --container-width: 420px;\n  --submit-btn-height: 46px;\n  --checkbox-size: 19px;\n\n  /* Shadows and effects */\n  --box-shadow-card: 0 2px 12px 0 var(--color-card-shadow);\n  --opacity-placeholder: 0.6;\n}\n/* Example of sleek minimalist form elements: */\ninput, select, textarea {\n  font-family: var(--font-family);\n  background: #fff;\n  color: var(--color-input-text);\n  border: 1.5px solid var(--color-input-border);\n  border-radius: var(--border-radius-input);\n  padding: var(--padding-form-input);\n  transition: border 0.2s;\n}\n\ninput:focus, select:focus, textarea:focus {\n  border: 1.5px solid var(--color-focus-border);\n  outline: none;\n}\n\nbutton[type=\"submit\"] {\n  background: var(--color-submit-btn-bg);\n  color: var(--color-submit-btn-text);\n  border: none;\n  border-radius: var(--border-radius-input);\n  height: var(--submit-btn-height);\n  font-weight: var(--font-weight-bold);\n  letter-spacing: 0.01em;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n\nbutton[type=\"submit\"]:hover {\n  background: #333;\n}\n\nlabel {\n  color: var(--color-label);\n  font-size: var(--font-size-label);\n  font-weight: var(--font-weight-bold);\n  margin-bottom: 6px;\n  letter-spacing: 0.01em;\n}\n\n.card {\n  background: var(--color-card-bg);\n  border-radius: var(--border-radius-card);\n  box-shadow: var(--box-shadow-card);\n  padding: var(--card-padding);\n  border: 1px solid var(--color-card-border);\n}\n\n::-webkit-input-placeholder { color: var(--color-placeholder); opacity: var(--opacity-placeholder);}\n::-moz-placeholder { color: var(--color-placeholder); opacity: var(--opacity-placeholder);}\n:-ms-input-placeholder { color: var(--color-placeholder); opacity: var(--opacity-placeholder);}\n::placeholder { color: var(--color-placeholder); opacity: var(--opacity-placeholder);}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        160,
+        -48
+      ],
+      "id": "cd984872-03f1-4a06-95a6-6b8b30cf70f9",
+      "name": "Form",
+      "webhookId": "9045ac52-9aca-47b8-83e5-3af2d55c2fa9"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-10-12T18:04:36.833Z",
+      "updatedAt": "2025-10-12T18:04:36.833Z",
+      "role": "workflow:owner",
+      "workflowId": "wC87F2YBeoqcA72B",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-10-15T17:30:54.000Z",
+  "versionId": "1fdb22b9-8edf-41a6-b60a-7063cbd5a6ee"
+}
