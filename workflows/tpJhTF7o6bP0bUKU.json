@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "/": {
       "main": [
@@ -277,23 +277,9 @@
     },
     {
       "parameters": {
-        "content": "## Subworkflow",
-        "height": 751,
-        "width": 2547,
-        "color": 6
-      },
-      "id": "669aa2f5-ea9b-465d-a0d4-b22efd620a0f",
-      "name": "Sticky Note",
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        0,
-        640
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "filters": {},
+        "filters": {
+          "activeWorkflows": true
+        },
         "requestOptions": {}
       },
       "id": "5b9d83dd-1237-4298-a09f-5488ec0ebf0d",
@@ -579,38 +565,6 @@
     },
     {
       "parameters": {
-        "content": "## Backup to GitHub \nThis workflow will backup all instance workflows to GitHub.\n\nThe files are saved `ID.json` for the filename.\n\n### Setup\nOpen `Globals` node and update the values below 👇\n\n- **repo.owner:** your Github username\n- **repo.name:** the name of your repository\n- **repo.path:** the folder to use within the repository. If it doesn't exist it will be created.\n\n\nIf your username was `john-doe` and your repository was called `n8n-backups` and you wanted the workflows to go into a `workflows` folder you would set:\n\n- repo.owner - john-doe\n- repo.name - n8n-backups\n- repo.path - workflows/\n\n\nThe workflow calls itself using a subworkflow, to help reduce memory usage.",
-        "height": 600.88409546716,
-        "width": 371.1995072042308,
-        "color": 4
-      },
-      "id": "8fb20bbd-5a0c-4b78-bafb-00e487fe90ba",
-      "name": "Sticky Note1",
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        0,
-        0
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "content": "## Main workflow loop",
-        "height": 434.88564057365943,
-        "width": 886.4410237965205,
-        "color": 7
-      },
-      "id": "1cb98528-3cf6-4cd6-ab31-4be6defeb52d",
-      "name": "Sticky Note2",
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        400,
-        192
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
         "resource": "file",
         "operation": "get",
         "owner": {
@@ -679,22 +633,6 @@
         912
       ],
       "typeVersion": 3.4
-    },
-    {
-      "parameters": {
-        "content": "## Edit this node 👇",
-        "height": 80,
-        "width": 150,
-        "color": 4
-      },
-      "id": "12813d16-6071-4b2c-bbe9-ba7bf6d6745d",
-      "name": "Sticky Note3",
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        800,
-        784
-      ],
-      "typeVersion": 1
     },
     {
       "parameters": {
@@ -839,9 +777,13 @@
       "projectId": "pU2j9nE4cp6SFzch"
     }
   ],
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2025-10-17T09:23:03.000Z",
-  "versionId": "ffe9c639-ed9b-4b5d-8ee4-ee2e9ab2d276"
+  "triggerCount": 1,
+  "updatedAt": "2025-10-17T09:36:03.000Z",
+  "versionId": "657d45ce-b307-4277-87d8-5b910af864df"
 }
