@@ -262,7 +262,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "name": "n8n workflow backups",
+  "name": "Push to GitHub",
   "nodes": [
     {
       "parameters": {},
@@ -791,6 +791,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-10-17T09:42:14.000Z",
-  "versionId": "653774ec-b864-4655-a0da-c2cb9d04d872"
+  "updatedAt": "2025-10-17T09:44:29.000Z",
+  "versionId": "b45f893d-3ad1-43d4-8483-28adb008380c"
 }
