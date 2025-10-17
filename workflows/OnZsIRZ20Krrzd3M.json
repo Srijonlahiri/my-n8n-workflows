@@ -1,0 +1,401 @@
+{
+  "active": false,
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "Upload File ": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Analysis": {
+      "main": [
+        [
+          {
+            "node": "Video Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "5 seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5 seconds": {
+      "main": [
+        [
+          {
+            "node": "Get Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission1": {
+      "main": [
+        [
+          {
+            "node": "Upload File ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video Analysis": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-08T09:11:41.810Z",
+  "id": "OnZsIRZ20Krrzd3M",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Viral Shorts Scriptwriter",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/lnieQLGTodpbhjpZtg1k",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "xi-api-key",
+              "value": "sk_eff2779cb68846e2f6953c8466fc1e407400f8674c7e4838"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.data.text }}"
+            },
+            {
+              "name": "model_id",
+              "value": "eleven_multilingual_v2"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        -464
+      ],
+      "id": "62baf77e-485f-4577-988a-749d5f37f865",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"role\": \"user\",\n      \"parts\": [\n        {\n          \"fileData\": {\n            \"fileUri\": \"{{ $json.file.uri }}\",\n            \"mimeType\": \"{{ $json.file.mimeType }}\"\n          }\n        },\n        {\n          \"text\": \"I want a 1000-word simple yet detailed explanatation of the entire video.\"\n        }\n      ]\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -64,
+        -560
+      ],
+      "id": "dc871426-163f-4b61-a0f6-cc239ed869e4",
+      "name": "Get Analysis",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "qXd9jaSuoBvkqfZP",
+          "name": "Query Auth account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/upload/v1beta/files",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Goog-Upload-Command",
+              "value": "start, upload, finalize"
+            },
+            {
+              "name": "X-Goog-Upload-Header-Content-Length",
+              "value": "={{ $binary.Video.fileSize }}"
+            },
+            {
+              "name": "X-Goog-Upload-Header-Content-Type",
+              "value": "={{ $binary.Video.fileType }}/{{ $binary.Video.fileExtension }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "={{ $binary.Video.fileType }}/{{ $binary.Video.fileExtension }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "Video",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -512,
+        -560
+      ],
+      "id": "c464f9ed-5815-4499-beea-0776ea751cf2",
+      "name": "Upload File ",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "qXd9jaSuoBvkqfZP",
+          "name": "Query Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        -656
+      ],
+      "id": "7bd1531d-d2db-4c27-b5d8-5d3930f87dc7",
+      "name": "5 seconds",
+      "webhookId": "2ae152a3-3b31-497a-b285-8a19a7933c07"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -288,
+        -560
+      ],
+      "id": "5341203c-18f7-40c5-adf2-10b54814d16a",
+      "name": "Wait",
+      "webhookId": "bf2e644e-b6de-463f-938b-71c42da94efe"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "268682ab-62a0-4e6f-aea0-652b30325f70",
+              "name": "Video Analysis",
+              "value": "={{ $json.candidates[0].content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        -464
+      ],
+      "id": "9a980db3-97e9-4c38-925e-fcbee24ff96e",
+      "name": "Video Analysis"
+    },
+    {
+      "parameters": {
+        "formTitle": "Insert Video",
+        "formDescription": "Drop in a video for analysis.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Video",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -736,
+        -560
+      ],
+      "id": "7a58f0fa-c5f3-4e62-b158-e6d55b47890e",
+      "name": "On form submission1",
+      "webhookId": "d5b07e65-1bc8-4d57-9c91-e3f7531dbd08"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "lahirisrijon@gmail.com",
+        "subject": "Draft Script",
+        "message": "={{ $json.output }}",
+        "responseType": "freeText",
+        "options": {
+          "messageButtonLabel": "Edit",
+          "responseFormTitle": "Final Script",
+          "responseFormButtonLabel": "Turn Into Voiceover",
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        736,
+        -464
+      ],
+      "id": "dfaa2fd6-45ca-4043-8d36-10546d7bd63e",
+      "name": "Send a message",
+      "webhookId": "d47a3f43-cb93-4199-8d1e-bb3c41cf956b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FywFx8HpSBKRYjsk",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Senior Viral Short-Form Video Scriptwriter at a billion-dollar media company, specializing in emotional, high-retention storytelling for short-form platforms (YouTube Shorts, TikTok, Reels). Your job is to craft 30-second to 1-minute scripts that immediately hook viewers, sustain curiosity, and deliver a powerful emotional payoff that inspires shares, saves, and comments.\n\nYour writing style blends:\n\nViral storytelling pacing (hook → tension → twist → emotional release)\n\nConversational authenticity (real human tone, not over-polished)\n\nVisual rhythm (short sentences that match quick edits or cut scenes)\n\nEmotional payoff (leaves the viewer feeling something deeply — awe, warmth, shock, or inspiration)\n\n🎯 YOUR OBJECTIVE:\n\nWrite a viral, heart-touching short-form video script on the following topic:\n\n{{ $('Video Analysis').item.json['Video Analysis'] }}\n\n🧠 GUIDELINES:\n\nHook (0:00–0:05):\n\nBegin with a line that instantly triggers curiosity or emotion.\n\nIt should make the viewer need to see what happens next.\n\nUse “this guy,” “this woman,” “what happens next,” or direct POV storytelling (“I was just walking when…”).\n\nBuild Tension (0:05–0:30):\n\nReveal small details that make the story feel real and relatable.\n\nCreate mini-cliffhangers at each sentence.\n\nAvoid summarizing — narrate it like it’s happening right now.\n\nClimax / Twist (0:30–0:45):\n\nDeliver the emotional or shocking turning point.\n\nThis should create a “no way…” or “wow…” moment.\n\nResolution / Emotional Payoff (0:45–1:00):\n\nEnd with a line that leaves a lump in the throat or makes viewers reflect.\n\nKeep it authentic, short, and human — not preachy.\n\nTone & Structure:\n\nFormat your script with timestamps (00:00) for each moment.\n\nKeep dialogue short, realistic, and cinematic.\n\nMatch the energy and pacing of the samples provided below.\n\n🧩 REFERENCE SAMPLES (STYLE & STRUCTURE):\n\nUse the following examples as tonal and structural benchmarks for your script:\n\nSAMPLE 1: This guy randomly saw David Gogggins running down the street and decided to stop him mid-run. And what happens next truly shows how humble and respectful Gogggins is. It is David Gogggins. I know his name. What was that? At first, his wife wasn't sure if it was really him, but he was. So, he decided to pull over.\n(00:16) David Gogggins. Hi. I want to shake your hand. I want to shake your hand, man. What's up, boy? Blessings to you, man. I watch you all the time. I love you, man. What's your name? My name is Justin. I'm on YouTube as well. Can I send you a message or something? Hang on a second. What's your name, man? Chris Lynn.\n(00:31) Nice to meet you both. Yes, sir. David Gogggins. Info. David Gogggins.com, brother. Yes, sir. Hey, have a blessed day. Have a blessed day, sir.\n\nSAMPLE 2: \n(00:00) is this photo familiar to you this son is about to surprise his father after searching him for 24 years and what happens next is truly heartwarming that kid right here it's me I finally picture from my dad I finally found you I've been looking years and years trying to reach out to you and trying to look for you and I take this back this is joke this a time are you Justin yeah justtin you're my dad this is me [Music] SAU I've been looking for you for years what's your name Alex do you remember Lucia that's my mom yeah when I hear Lucia's name I\n(00:45) light up no I'm going way no way are you really my son wait wait wait wait wait wait are you really my son going to give me a hug give me a hug come here I think this is the best Christmas present I ever got\n\nSAMPLE 3: \n(00:00) Uh, what are you looking for? My engagement ring. I took it off to pump my gas and I thought that I put it in my purse, but it must have fallen out and I'm late for my flight and I'm I'll find your ring and I'll FedEx it to you. I'll give you a reward. Don't be silly. $3,000. It's worth more than my car. Just give me your number. I'll find it.\n(00:18)  I was engaged once, but I'm single now. Bye. Hope you make your flight. This man thought he was doing this woman a favor by finding her ring. But little did he know, he was about to get played in a way he never expected. Hey, you found my ring. So, I've been looking all over for it. Your ring? It was my friend.\n(00:36)  I'm going to send it to her. Do I get a reward? 80 400. That's it. You made someone very happy. You sure? Nice. How many left? Enough for us to get to\n\n\n💎 FINAL OUTPUT REQUIREMENTS:\n\nLength: 30–60 seconds (approx. 100–150 words)\n\nFormat: Timestamped short-form narration/dialogue\n\nStyle: Emotional, cinematic, retention-focused\n\nDelivery: Feels real, unscripted, and emotionally resonant\n\nEmotion: Aim to make the viewer say “wow” or “that gave me chills.\n\n ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        384,
+        -464
+      ],
+      "id": "1281fa29-c0d5-46e6-84d9-6c63271a0b72",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -240
+      ],
+      "id": "5cdf58c9-30ec-493e-a345-41c221852089",
+      "name": "Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-10-08T09:11:41.832Z",
+      "updatedAt": "2025-10-08T09:11:41.832Z",
+      "role": "workflow:owner",
+      "workflowId": "OnZsIRZ20Krrzd3M",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-12T18:03:50.000Z",
+  "versionId": "9f7c1434-5000-4c59-aff3-6722f061071a"
+}
