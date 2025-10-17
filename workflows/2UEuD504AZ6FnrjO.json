@@ -1,0 +1,83 @@
+{
+  "active": false,
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-13T19:27:54.468Z",
+  "id": "2UEuD504AZ6FnrjO",
+  "isArchived": true,
+  "meta": null,
+  "name": "Example Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Workflow Description\nThis workflow demonstrates a simple example with two nodes: a Start node and a Function node.\n\nThe Start node triggers the workflow, and the Function node adds a new field to the input data."
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        100,
+        -150
+      ],
+      "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "name": "Workflow Description"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        300,
+        0
+      ],
+      "id": "01234567-89ab-cdef-0123-456789abcdef",
+      "name": "Start"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  item.json.newField = \"Hello, n8n!\";\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        500,
+        0
+      ],
+      "id": "fedcba98-7654-3210-fedc-ba9876543210",
+      "name": "Function"
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "timezone": "America/New_York"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-10-13T19:27:54.534Z",
+      "updatedAt": "2025-10-13T19:27:54.534Z",
+      "role": "workflow:owner",
+      "workflowId": "2UEuD504AZ6FnrjO",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-13T19:36:50.000Z",
+  "versionId": "40a7baed-5adc-4a88-9a82-22107a9ef4be"
+}
