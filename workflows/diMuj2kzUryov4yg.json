@@ -1,0 +1,105 @@
+{
+  "active": false,
+  "connections": {
+    "Code in Python (Beta)": {
+      "main": [
+        []
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code in Python (Beta)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-08T12:50:10.134Z",
+  "id": "diMuj2kzUryov4yg",
+  "isArchived": true,
+  "meta": null,
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# n8n Code in Python (Beta) — YouTube downloader\n# Input: items[0].json.url  (YouTube link)\n# Output: one item with .json = { url, filepath, ext, title, duration, size_bytes, mime }\n\nimport os, sys, json, subprocess, mimetypes, pathlib, shutil\n\n# -------- helpers --------\ndef ensure_yt_dlp():\n    try:\n        import yt_dlp  # noqa: F401\n        return\n    except Exception:\n        # Install yt-dlp into the environment of the running interpreter\n        subprocess.check_call([sys.executable, \"-m\", \"pip\", \"install\", \"--no-cache-dir\", \"-q\", \"yt-dlp\"])\n        import yt_dlp  # noqa: F401\n\ndef download_with_ytdlp(url: str, out_dir: str):\n    import yt_dlp\n\n    # Prefer MP4; fall back to best available\n    ydl_opts = {\n        \"outtmpl\": os.path.join(out_dir, \"%(title)s-%(id)s.%(ext)s\"),\n        \"restrictfilenames\": True,\n        \"format\": \"bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best\",\n        \"merge_output_format\": \"mp4\",  # needs ffmpeg for separate streams\n        \"noplaylist\": True,\n        \"quiet\": True,\n        \"no_warnings\": True,\n    }\n\n    os.makedirs(out_dir, exist_ok=True)\n\n    with yt_dlp.YoutubeDL(ydl_opts) as ydl:\n        info = ydl.extract_info(url, download=True)\n\n        # Best-effort to resolve the final file path\n        fp = None\n        if info.get(\"requested_downloads\"):\n            # Newer yt-dlp versions expose the exact written path here\n            try:\n                fp = info[\"requested_downloads\"][0][\"filepath\"]\n            except Exception:\n                fp = None\n        if not fp:\n            # Fallback to prepare_filename (may be slightly different post-merge)\n            fp = ydl.prepare_filename(info)\n            # If a merge happened, extension might be different (e.g., .mp4)\n            root = os.path.splitext(fp)[0]\n            # Probe common extensions to find the actual file\n            for ext in (info.get(\"ext\"), \"mp4\", \"mkv\", \"webm\", \"m4a\"):\n                if ext:\n                    candidate = root + \".\" + ext\n                    if os.path.exists(candidate):\n                        fp = candidate\n                        break\n\n    return info, fp\n\ndef guess_mime(path):\n    m, _ = mimetypes.guess_type(path)\n    return m or \"application/octet-stream\"\n\n# -------- main --------\n# n8n provides a list named `items`. We’ll read the first item’s url.\nif not items or \"json\" not in items[0] or \"url\" not in items[0][\"json\"]:\n    raise ValueError('Provide the YouTube link in item.json.url (e.g., via a Set node)')\n\nurl = str(items[0][\"json\"][\"url\"]).strip()\nif not url.startswith(\"http\"):\n    raise ValueError(\"Invalid URL\")\n\n# Choose an output directory (n8n Docker usually has /data as a persistent volume)\noutput_dir = \"/data/downloads\" if os.path.isdir(\"/data\") else os.getcwd()\n\n# Ensure yt-dlp is available, then download\nensure_yt_dlp()\ninfo, filepath = download_with_ytdlp(url, output_dir)\n\nif not filepath or not os.path.exists(filepath):\n    raise RuntimeError(\"Download finished but the output file was not found. Check ffmpeg/permissions.\")\n\nsize_bytes = os.path.getsize(filepath)\nmime = guess_mime(filepath)\n\n# Build a clean result for n8n\nresult = {\n    \"url\": url,\n    \"filepath\": str(pathlib.Path(filepath).resolve()),\n    \"ext\": info.get(\"ext\"),\n    \"title\": info.get(\"title\"),\n    \"duration\": info.get(\"duration\"),  # seconds (if available)\n    \"size_bytes\": int(size_bytes),\n    \"mime\": mime,\n}\n\n# Return exactly one item to n8n\nreturn [{\"json\": result}]\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        32
+      ],
+      "id": "4f0f1bf8-17db-48d2-804f-ea9e71e63bc1",
+      "name": "Code in Python (Beta)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c2734826-6810-421a-a5cd-31180d534737",
+              "name": "url",
+              "value": "https://youtube.com/shorts/gZiCUMaxEw0?si=OQa8ZIDviJOmE686",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        32
+      ],
+      "id": "3a7d830d-d18d-4f6d-99c8-9a8c7899e85d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        32
+      ],
+      "id": "5b7c4534-fa3c-48d9-992f-eaccdd89fd41",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-10-08T12:50:10.150Z",
+      "updatedAt": "2025-10-08T12:50:10.150Z",
+      "role": "workflow:owner",
+      "workflowId": "diMuj2kzUryov4yg",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-08T17:10:42.000Z",
+  "versionId": "3d0c72a3-7326-4d65-8ee8-b3977796b865"
+}
