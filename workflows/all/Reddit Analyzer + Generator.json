@@ -1,0 +1,332 @@
+{
+  "name": "Reddit Analyzer + Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        16
+      ],
+      "id": "5f7b344a-57eb-47ee-b701-3b9293f62c1f",
+      "name": "When chat message received",
+      "webhookId": "93ea2f1b-5d5e-46b1-acf5-6cab4dd05835"
+    },
+    {
+      "parameters": {
+        "content": "## Get 100 \"Rising\" Reddit Posts \nScrape top 100 rising reddit posts from any subreddit & store it in a vector database.",
+        "height": 464,
+        "width": 832,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -464,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "a23ddf80-2f01-4010-ba13-e75b27d1e073",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "value": "reddit",
+          "mode": "list"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        -16
+      ],
+      "id": "b6821e08-d81a-4df3-8cb7-0d3b56aeca31",
+      "name": "VECTOR STORE"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "subreddit": "n8n",
+        "filters": {
+          "category": "rising"
+        }
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        96
+      ],
+      "id": "ffb9c208-d118-4b26-8739-b8f7e627b915",
+      "name": "Scrape 100 Rising Posts",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "o9UhpI1RXjQx3AxY",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        96
+      ],
+      "id": "e72150e1-0f5c-434c-acdb-c77d0b26ce50",
+      "name": "START"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "da9fa0ea-28c8-4e19-8a37-fe3a2f55aeb9",
+      "name": "Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        208
+      ],
+      "id": "4b62fabe-bd23-48c1-aaa6-49961da6f0c7",
+      "name": "Loader"
+    },
+    {
+      "parameters": {
+        "content": "## Ask Questions & Generate Viral Reddit Posts\nAsk questions to analyze trending topics. Then, generate a viral Reddit post on the topic(s).",
+        "height": 704,
+        "width": 832,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        416,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "3f6227ce-56ca-4e84-b126-56501dcd84c1",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        704,
+        240
+      ],
+      "id": "68cec812-b46e-4592-ae4f-c29a5ce3fbfd",
+      "name": "Gemini'",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        832,
+        240
+      ],
+      "id": "918cce76-c687-41f5-8c29-d9943e332ad6",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "This is your knowledge base. Answer every post using your knowledge base. For example, if the user asks for trend analysis, analyze this knowledge base. It contains top 100 reddit posts for your to analyze if required.",
+        "memoryKey": {
+          "__rl": true,
+          "value": "reddit",
+          "mode": "list",
+          "cachedResultName": "reddit"
+        },
+        "topK": 500
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        960,
+        240
+      ],
+      "id": "d001cbf5-d527-491f-811f-3a1445700c50",
+      "name": "Knowledge Base"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        448
+      ],
+      "id": "dbda04f0-af7d-4d28-8d9f-5e0c3c21b5ad",
+      "name": "Gemini''",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "To improve your AI agent’s system prompt using proven prompt engineering frameworks and Reddit content writing strategies, here’s an enhanced version—and reasoning based on prompt engineering best practices, persona prompting research, and Reddit post templates:\n\nImproved System Prompt:\n\nYou are an advanced Reddit analyzer and post writer.\n\nRoles:\nAct as both a critical analyzer (presenting evidence—direct quotes/proofs from your knowledge base, and referencing general info/context as needed) and a high-performing Reddit post creator.\n\nWriting Directions:\nWhen creating Reddit posts:\n\nUse hook formats and intro styles drawn from exemplars in your knowledge base.\n\nSelect or remix leading post templates/hooks for each topic (try question, bold statement, or scenario openers). Add your own creative twist to make hooks stand out.\n\nWrite in a casual, human, and conversational tone.\n\nAvoid robotic, generic, or jargon-filled language—use relatable, simple sentences, and real-world references.\n\nReference frameworks and templates, but adapt for context and audience.\n\nAnalysis Directions:\n\nWhen analyzing, always show proofs (for example, quote lines or direct evidence from your database).\n\nWhen helpful, provide additional general or background info.\n\nStyle & Output:\nMake responses clear, detailed, and authentically human—avoid clichés and overused phrases.\nStrive for original, vivid hooks, and structure posts following viral Reddit formats but with your personal touch.\nIf instructions are ambiguous, reformulate the user’s question for clarity before responding.\n\nPersona and User Context:\nRemember: You’re a helpful, witty, and insightful agent, focused on producing posts that resonate on Reddit.\nThe user is building an AI agent for workflow automation and viral social content.\n\nRule: Use your knowledge base every time containing top 100 rising posts. Only go for the text-based posts."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        16
+      ],
+      "id": "e7280e19-4d75-46ae-aaae-ce311c8ecdf2",
+      "name": "Trend Analyzer + Reddit Generator"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Trend Analyzer + Reddit Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape 100 Rising Posts": {
+      "main": [
+        [
+          {
+            "node": "VECTOR STORE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "START": {
+      "main": [
+        [
+          {
+            "node": "Scrape 100 Rising Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "VECTOR STORE",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "VECTOR STORE",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini'": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Trend Analyzer + Reddit Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Trend Analyzer + Reddit Generator",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base": {
+      "ai_tool": [
+        [
+          {
+            "node": "Trend Analyzer + Reddit Generator",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini''": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "678ee4a5-e094-4d33-8a06-0e9a451b9008",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "275c3ff9ef17b2b07f503f0e42ff68f5d26b3219b06ef24a4ce9d3cf4ac583bd"
+  },
+  "id": "LsgEJKXTqrqBOW69",
+  "tags": []
+}
