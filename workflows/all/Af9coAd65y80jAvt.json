@@ -1,0 +1,264 @@
+{
+  "active": false,
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T20:53:43.245Z",
+  "id": "Af9coAd65y80jAvt",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "LinkedIn Profile Researcher + Ice-Breaker Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "LinkedIn Scraper",
+        "formDescription": "Provide LinkedIn URL to scrape & provide you their summary.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "LinkedIn URL",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "08ec0f8d-0c5e-4b5d-a22e-e48fb6b5d24e",
+      "name": "On form submission",
+      "webhookId": "1367ce10-d217-4651-9de7-6b8b9728b1ca"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json['LinkedIn URL'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "71561c5a-12db-4694-b3bb-16718b7f80b0",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "html": "={{ $json.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "cbd6480d-d3da-4306-a057-06df587ed2ea",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Provide a detailed summary of this profile: {{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "21fde84c-0f14-42c6-b294-c31e80bf1488",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert in crafting high-impact, ultra-personalized first-line icebreaker messages. Given the following input text and available data about the recipient, write a SINGLE one-liner that:\n- Feels specifically tailored—reference unique details or interests from the input\n- Sparks curiosity, makes the recipient feel seen, and invites a genuine response\n- Uses positive, conversational language (avoid clichés)\nRespond ONLY with the one-liner.\nDo not ask questions. Provide as much specific information as you can. It's the 1st line of the cold-email I'm sending to the recepient. So, it must be attractive and the recepeient must feel that I've conducted good amount of research before sending the email. \n\nRULE: Be human.\n\nAlways tell something super interesting and unusual/special you have noticed. \n\nStart with I. \n\nMake the language casual and interesting. Provide at least 4 specifications about the recipient in this 1-liner.\n\nUse super-easy lanuage. Be direct. Be interesting. Don't try to write very perfect sentences. Keep it real. \n\nBe wierd/ Like super-wierd. Go deep into the specifics (only the interesting ones). Keep it 1-liner. \n\nMake the recepient feel special, heard, and researched. Talk about recent experiences, not old ones. \nRecipient Data: \n{{ $json.content.parts[0].text }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "94101b9d-6e6a-4a1d-8803-8e5359c624b1",
+      "name": "Message a model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "jvaLJ04HQE9ED4ph",
+          "mode": "list",
+          "cachedResultName": "Icebreaker",
+          "cachedResultUrl": "/projects/pU2j9nE4cp6SFzch/datatables/jvaLJ04HQE9ED4ph"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Icebreaker": "={{ $json.content.parts[0].text }}",
+            "LinkedInURL": "={{ $('On form submission').item.json['LinkedIn URL'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "LinkedInURL",
+              "displayName": "LinkedInURL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Icebreaker",
+              "displayName": "Icebreaker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "optimizeBulk": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        0
+      ],
+      "id": "c817d0b2-a74c-445b-bb55-9de68e126700",
+      "name": "Insert row"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-11-13T20:53:43.252Z",
+      "updatedAt": "2025-11-13T20:53:43.252Z",
+      "role": "workflow:owner",
+      "workflowId": "Af9coAd65y80jAvt",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-17T09:47:04.437Z",
+      "updatedAt": "2025-10-17T09:47:04.437Z",
+      "id": "m1LLrDd9GoIPBG1W",
+      "name": "all"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-12-09T18:04:04.000Z",
+  "versionId": "513e36ee-ae4d-4242-b06d-ca849e0977a8"
+}
