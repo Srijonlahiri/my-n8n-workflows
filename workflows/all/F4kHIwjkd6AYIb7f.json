@@ -1,0 +1,663 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request web page for URL": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicate URLs": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Request web page for URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Home": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Only Websites & Emails": {
+      "main": [
+        [
+          {
+            "node": "Scrape Home",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicate URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Only Websites & Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-07T18:26:24.685Z",
+  "id": "F4kHIwjkd6AYIb7f",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Deep Multiline Icebreaker System",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "42a4d8ba-e186-421d-9394-e221173c823f",
+      "name": "Remove Duplicate URLs",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "position": [
+        2672,
+        0
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        352,
+        48
+      ],
+      "id": "91245146-d9e5-4723-885e-748f1c9f0bfc",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "links",
+              "cssSelector": "a",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {
+          "trimValues": true,
+          "cleanUpText": true
+        }
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1328,
+        80
+      ],
+      "id": "0e5fb53a-d047-4112-821d-d652287b85c7",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "links",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        0
+      ],
+      "id": "80278b66-cee3-48e6-8778-0c09931f9f68",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9a75bc22-f6b3-426e-96df-db5e319e5cd5",
+              "leftValue": "={{ $json.links }}",
+              "rightValue": "/",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        2224,
+        0
+      ],
+      "id": "b937c1aa-c0dd-4885-b5c2-f096e31ffc68",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Loop Over Items').item.json.website_url }}{{ $json.links }}",
+        "options": {}
+      },
+      "id": "4009c7d0-de9c-4b53-8112-f7d86187fe0a",
+      "name": "Request web page for URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3120,
+        0
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "html": "={{ $json.data ? $json.data : \"<div>empty</div>\" }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        3344,
+        0
+      ],
+      "id": "e921e350-c496-487c-b953-ffe09f6fceb8",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "maxItems": 3
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2896,
+        0
+      ],
+      "id": "572b006a-4269-4cfb-8a48-beecdc5a6eff",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.website }}",
+        "options": {
+          "allowUnauthorizedCerts": false,
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "8f3969d2-4d05-483e-b37e-049122a0ffdf",
+      "name": "Scrape Home",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1104,
+        80
+      ],
+      "executeOnce": false,
+      "typeVersion": 4.2,
+      "alwaysOutputData": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e7737c7a-b5b6-44a1-9f0d-361f0ac7a459",
+              "name": "first_name",
+              "value": "={{ $('Only Websites & Emails').item.json.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "e867e03d-60e6-4dee-b1ac-12c517fd8d6c",
+              "name": "last_name",
+              "value": "={{ $('Only Websites & Emails').item.json.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d522ec31-e21e-417e-ab78-f4a49019e544",
+              "name": "email",
+              "value": "={{ $('Only Websites & Emails').item.json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "8f1ddf8d-7df8-433e-a687-c1a81cced4e1",
+              "name": "website_url",
+              "value": "={{ $('Only Websites & Emails').item.json.organization.website_url }}",
+              "type": "string"
+            },
+            {
+              "id": "9ccf7442-97cc-4840-aff0-7919e4119027",
+              "name": "headline",
+              "value": "={{ $('Only Websites & Emails').item.json.headline }}",
+              "type": "string"
+            },
+            {
+              "id": "d2eb1588-87d2-43b2-8356-7bfe754c7707",
+              "name": "location",
+              "value": "={{ $('Only Websites & Emails').item.json.city }} {{ $('Only Websites & Emails').item.json.country }}",
+              "type": "string"
+            },
+            {
+              "id": "b9ca5dad-9733-4b62-aeb8-c5675bc423d9",
+              "name": "phone_number",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "40fd7130-c65d-4826-a713-ecca24d23b07",
+              "name": "links",
+              "value": "={{ $json.links }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1552,
+        80
+      ],
+      "id": "b415f85f-9495-49cb-85a8-7242913b1528",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fc44a289-8c50-4682-8b50-c2e63cfc6514",
+              "leftValue": "={{ $json.website }}",
+              "rightValue": "/",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        80
+      ],
+      "id": "f29de9b3-5442-4709-881e-76064f3e823c",
+      "name": "Only Websites & Emails"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1776,
+        80
+      ],
+      "id": "fbd7cabe-d23c-4a33-af76-474e2c3b1340",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst updatedItems = items.map((item) => {\n  const link = item?.json?.links;\n\n  if (typeof link === \"string\") {\n    // Case: starts with \"/\" → already relative\n    if (link.startsWith(\"/\")) {\n      item.json.links = link;\n    } \n    \n    // Case: absolute URL (http or https)\n    else if (link.startsWith(\"http://\") || link.startsWith(\"https://\")) {\n      try {\n        const url = new URL(link);\n        let path = url.pathname;\n\n        // Strip trailing slash unless root \"/\"\n        if (path !== \"/\" && path.endsWith(\"/\")) {\n          path = path.slice(0, -1);\n        }\n\n        item.json.links = path || \"/\";\n      } catch (e) {\n        // On parse error, keep original\n        item.json.links = link;\n      }\n    }\n\n    // Fallback: not relative or absolute, leave as-is\n    else {\n      item.json.links = link;\n    }\n  }\n\n  return item;\n});\n\nreturn updatedItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        0
+      ],
+      "id": "6fa99c09-0afa-4a04-805e-c300813e7e34",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You're a helpful, intelligent website scraping assistant.",
+              "role": "model"
+            },
+            {
+              "content": "You're provided a Markdown scrape of a website page. Your task is to provide a two-paragraph abstract of what this page is about.\n\nReturn in this JSON format:\n\n{\"abstract\":\"your abstract goes here\"}\n\nRules:\n- Your extract should be comprehensive—similar level of detail as an abstract to a published paper.\n- Use a straightforward, spartan tone of voice.\n- If it's empty, just say \"no content\"."
+            },
+            {
+              "content": "={{ $json.data }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        3552,
+        0
+      ],
+      "id": "4c66f04b-4be8-4f1e-a382-44192c035260",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "7M5RePMc5VJDgaWN",
+          "mode": "list",
+          "cachedResultName": "Lead Data",
+          "cachedResultUrl": "/projects/pU2j9nE4cp6SFzch/datatables/7M5RePMc5VJDgaWN"
+        },
+        "limit": 5
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        592,
+        64
+      ],
+      "id": "97f98788-55f7-468d-89fd-655e6694e6f5",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-001",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-001"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You're a helpful, intelligent sales assistant.",
+              "role": "model"
+            },
+            {
+              "content": "=We just scraped a series of web pages for a business called . Your task is to take their summaries and turn them into catchy, personalized openers for a cold email campaign to imply that the rest of the campaign is personalized.\n\nYou'll return your icebreakers in the following JSON format:\n\n{\"icebreaker\":\"Hey {name}. \\n\\n I hope you'll forgive me... \\n\\n\n\nBut I creeped you/your site quite a bit...\\n\\n\n\nAnd know that {anotherThing} is important to you guys! \\n\\n\n\n(or at least I'm assuming this given the focus on {fourthThing})\\n\\n\n\nSo, I spent 20 minutes creating a quick, high-converting demo revamp of your main landing page using some new AI tools.\\n\\n\n\nIt's completely free. No strings attached.\\n\\n\n\nYou can see it here: LINK TO DEMO REVAMP\\n\\n\n\nHope this gives you some ideas.\\n\\n\n\nThanks,\n[Your Name]\"}\n\nRules:\n- Write in a spartan/laconic tone of voice.\n- Make sure to use the above format when constructing your icebreakers. We wrote it this way on purpose.\n- Shorten the company name wherever possible (say, \"XYZ\" instead of \"XYZ Agency\"). More examples: \"Love AMS\" instead of \"Love AMS Professional Services\", \"Love Mayo\" instead of \"Love Mayo Inc.\", etc.\n- Do the same with locations. \"San Fran\" instead of \"San Francisco\", \"BC\" instead of \"British Columbia\", etc.\n- For your variables, focus on small, non-obvious things to paraphrase. The idea is to make people think we *really* dove deep into their website, so don't use something obvious. Do not say cookie-cutter stuff like \"Love your website!\" or \"Love your take on marketing!\"."
+            },
+            {
+              "content": "={{ $('Message a model').item.json.content.parts[0].text }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        4144,
+        16
+      ],
+      "id": "581c5d9e-1c46-4245-a4b4-4a6fa23c33c9",
+      "name": "Message a model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "lahirisrijon@gmail.com",
+        "subject": "NEW",
+        "message": "={{ $json.content.parts[0].text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        4496,
+        144
+      ],
+      "id": "a9a10da6-1612-4daf-b2de-bb34dec28a59",
+      "name": "Send a message",
+      "webhookId": "ca5660e7-93f9-418e-bf60-13c3ae3e6fff",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FywFx8HpSBKRYjsk",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3904,
+        0
+      ],
+      "id": "deab32fa-1010-4f7d-a709-fbc10c4594a1",
+      "name": "Wait",
+      "webhookId": "efab1a9a-2c4b-410f-863b-a59e05fc3c88"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-12-07T18:26:24.698Z",
+      "updatedAt": "2025-12-07T18:26:24.698Z",
+      "role": "workflow:owner",
+      "workflowId": "F4kHIwjkd6AYIb7f",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-17T09:47:04.437Z",
+      "updatedAt": "2025-10-17T09:47:04.437Z",
+      "id": "m1LLrDd9GoIPBG1W",
+      "name": "all"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-09T18:03:28.000Z",
+  "versionId": "2529f155-2f2f-4421-9187-f76047a662b0"
+}
