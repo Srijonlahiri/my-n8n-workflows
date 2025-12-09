@@ -1,0 +1,1035 @@
+{
+  "active": false,
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Email Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Email Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Classifier": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload your file here": {
+      "main": [
+        [
+          {
+            "node": "Insert Data to Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader1": {
+      "ai_document": [
+        [
+          {
+            "node": "Insert Data to Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Insert Data to Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Data to Store": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Table": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T21:46:18.570Z",
+  "id": "WYO7zZIfIjXYjCUm",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Customer Support Email Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "INBOX"
+          ],
+          "readStatus": "unread"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -288,
+        80
+      ],
+      "id": "b5f8c610-b4c9-4918-93ce-92dabe147e08",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FywFx8HpSBKRYjsk",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        16,
+        208
+      ],
+      "id": "4332fb1a-4a6c-448e-bd1e-1256b4014700",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=The email:\n{{ $json.snippet }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You classify customer emails. \n\nOutput ONE word only: \n\nSIMPLE = FAQ/basic policy question COMPLEX = technical, multi-step ESCALATE = billing, security, angry customer"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -64,
+        -32
+      ],
+      "id": "42655cf7-d1c1-422e-87dd-cdb8fdd20411",
+      "name": "Email Classifier"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "SIMPLE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0c22b67a-c026-466c-9f41-4fd0759c7c94"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "SIMPLE"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fe446a87-eff9-4568-902d-7fc8081f6faf",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "COMPLEX",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "COMPLEX"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "79745783-e738-42c9-bbf2-3ec614a54baf",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "ESCALATE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ESCALATE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        288,
+        64
+      ],
+      "id": "3b30ad67-f78b-4a3b-beeb-6d3cb398ab5b",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI customer support agent of \"Literally AI Partners\" specialized in writing emails.\n\nGoals:\n• Understand the customer problem\n• Answer clearly, politely, efficiently\n• Escalate when uncertain or risky\n\nEmail Reply Rules:\n• Use: greeting + acknowledge issue + clear answer + closing\n• Tone: friendly, professional, concise\n• Never invent facts or prices\n\nAlways stick to your knowledge base for any data, and don't invent anything or go out of the data table.\n\nHere's the email from the customer:\n\nSUBJECT: {{ $('Gmail Trigger').item.json.Subject }}\n\nBODY: {{ $('Gmail Trigger').item.json.snippet }}",
+        "options": {
+          "systemMessage": "Always call the \"Data Table\" node for your knowledge-base. Don't invent any data. Just stick strictly to the data table as your only knowledge source for the email."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        -176
+      ],
+      "id": "0cbd2d7a-fab4-44ee-8b70-f79f12453986",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        528,
+        48
+      ],
+      "id": "7d70623f-192f-4e23-84c7-418bbb7e4ed1",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Upload your data to test RAG",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Upload your file(s)",
+              "fieldType": "file",
+              "acceptFileTypes": ".pdf, .csv",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -288,
+        560
+      ],
+      "id": "5e0737c8-ab1f-4e15-8f83-1cf3dc73b7a0",
+      "name": "Upload your file here",
+      "webhookId": "82848bc4-5ea2-4e5a-8bb6-3c09b94a8c5d"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "value": "vector_store_key",
+          "mode": "list",
+          "cachedResultName": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.2,
+      "position": [
+        -64,
+        560
+      ],
+      "id": "db45a3ba-b4fa-4217-9db7-62be8aa4c21c",
+      "name": "Insert Data to Store"
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        784
+      ],
+      "id": "db756938-30da-4eae-adfe-5148b1dd3f63",
+      "name": "Default Data Loader1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/embedding-001"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        784
+      ],
+      "id": "d6a2ed8b-f796-4443-baf0-b26844cd04f3",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "LuM2w4Qpl6JRmIq9",
+          "mode": "list",
+          "cachedResultName": "Customer Support Knowledge Base",
+          "cachedResultUrl": "/projects/pU2j9nE4cp6SFzch/datatables/LuM2w4Qpl6JRmIq9"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "pageContent": "={{ $json.pageContent }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "metadata",
+              "displayName": "metadata",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "pageContent",
+              "displayName": "pageContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        288,
+        560
+      ],
+      "id": "cfc59f3d-14b5-4e2c-a172-086b21be3794",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "LuM2w4Qpl6JRmIq9",
+          "mode": "list",
+          "cachedResultName": "Customer Support Knowledge Base",
+          "cachedResultUrl": "/projects/pU2j9nE4cp6SFzch/datatables/LuM2w4Qpl6JRmIq9"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}"
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1,
+      "position": [
+        656,
+        48
+      ],
+      "id": "16e13c93-340b-4c30-961d-ee93d5ed0fa9",
+      "name": "Data Table"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=Reply: {{ $('Gmail Trigger').item.json.Subject }}",
+        "message": "={{ $json.output }}",
+        "options": {
+          "sendTo": "={{ $('Gmail Trigger').item.json.From }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        864,
+        -80
+      ],
+      "id": "4e8f74fb-3ad3-428f-bb38-a7da27664ad1",
+      "name": "Create a draft",
+      "webhookId": "24cc1757-a377-48fb-aeda-8957e1054684",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FywFx8HpSBKRYjsk",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        576,
+        224
+      ],
+      "id": "ea398acd-087d-42fc-88e4-cdb9cf34a033",
+      "name": "Send a message",
+      "webhookId": "a5734267-ff58-4c74-9f89-fa7c3aacddb3",
+      "credentials": {
+        "slackApi": {
+          "id": "xqi9Y6H7P8NS3nYc",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Gmail Trigger": [
+      {
+        "json": {
+          "id": "19ae8deda91597e9",
+          "threadId": "19ae8ddf9b82e05e",
+          "snippet": "Hi Literally AI Partners Support Team, I hope you are doing well. I had a question about your service and wanted to clarify something. Specifically, I am a bit confused about what the requirements are",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 6062,
+          "historyId": "5979704",
+          "internalDate": "1764843509000",
+          "labels": [
+            {
+              "id": "SENT",
+              "name": "SENT"
+            },
+            {
+              "id": "INBOX",
+              "name": "INBOX"
+            },
+            {
+              "id": "IMPORTANT",
+              "name": "IMPORTANT"
+            },
+            {
+              "id": "UNREAD",
+              "name": "UNREAD"
+            }
+          ],
+          "Subject": "Question about Partner Program",
+          "From": "Srijon lahiri <lahirisrijon@gmail.com>",
+          "To": "Srijon lahiri <lahirisrijon@gmail.com>"
+        }
+      }
+    ],
+    "Insert Data to Store": [
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 1,
+                "to": 20
+              }
+            }
+          },
+          "pageContent": "Core company profile \n• Name: Literally AI Partners. \n• Nature of business: AI automation, AI agents, and workflow design for growth, lead \ngeneration, content, and operations. \n• Typical clients: Personal brands, solo founders, creators, small agencies, and lean \nSaaS businesses that want to grow without hiring a large team. \n• Core tech stack: n8n, modern LLMs, voice AI, API integrations (email, CRM, calendars, \npayments, social media). \n \nServices and offers \n• AI email & DM agents \n• Auto-reply to inbound emails/DMs for leads, FAQs, and basic support. \n• Classifies messages, drafts replies, escalates complex cases to humans, and \nlogs everything. \n• AI voice agents & website widgets \n• Voice widget on the site to answer questions, book appointments, take \npayments, send confirmations, and push data to sheets/CRM. \n• Used for appointment-setters, pre-qualification, and 24/7 support. \n• Automation & n8n workflows \n• End-to-end customer journeys: lead capture → follow-up → content"
+        }
+      },
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 18,
+                "to": 33
+              }
+            }
+          },
+          "pageContent": "• Used for appointment-setters, pre-qualification, and 24/7 support. \n• Automation & n8n workflows \n• End-to-end customer journeys: lead capture → follow-up → content \nrepurposing → reporting. \n• Integrations with email tools, calendars, payment gateways, spreadsheets, \nand CRMs. \n• Content & personal brand automations \n• Reddit / LinkedIn / multi-platform content workflows: idea sourcing, drafting, \nscheduling, and analytics. \n• Systems to turn long-form assets (podcasts, YouTube, newsletters) into daily \nposts. \n• Strategy & consulting \n• Audit of current processes, identification of “automation wins,” and an \nimplementation roadmap. \n• Option to run experiments and A/B tests to prove uplift in leads or revenue \nbefore scaling."
+        }
+      },
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 36,
+                "to": 57
+              }
+            }
+          },
+          "pageContent": "Pricing model (example structure) \nYou can adjust these numbers, but this structure is realistic for international clients. \n• One-time project setup \n• Small workflow / micro-automation: USD 300–700 (e.g., a simple \nlead-capture → email → sheet flow). \n• Standard system (e.g., full AI email agent or basic voice agent): USD 1,000–\n2,000. \n• Advanced system (multi-channel agent + payment + reporting): USD 2,000–\n4,000+. \n• Monthly retainers \n• Maintenance tier: USD 100–250/month for monitoring, minor fixes, and \nupdates. \n• Growth tier: USD 300–700/month for ongoing improvements, new \nworkflows, and reporting. \n• Scale tier: USD 1,000+/month for active experimentation, multi-agent \nsystems, and priority support. \n• Billing & currency \n• Default: USD pricing; INR available for Indian clients. \n• Payment methods: international gateways like Stripe/PayPal/Wise (or \nRazorpay for INR), subject to availability and age/legal constraints in India. \n \nExample pricing table"
+        }
+      },
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 54,
+                "to": 64
+              }
+            }
+          },
+          "pageContent": "• Payment methods: international gateways like Stripe/PayPal/Wise (or \nRazorpay for INR), subject to availability and age/legal constraints in India. \n \nExample pricing table \nOffer type Typical client use case Price range (USD) \nAI email agent Auto-handling inbound leads & FAQs \n1,000–2,000 setup + 100–\n250/month  \nAI voice widget Site widget for support + bookings + payments \n1,500–2,500 setup + 100–\n200/month"
+        }
+      },
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 66,
+                "to": 96
+              }
+            }
+          },
+          "pageContent": "Offer type Typical client use case Price range (USD) \nContent \nautomation \nReddit/LinkedIn content + repurposing \nworkflows 700–2,000 setup + 150–400/month  \nFull automation \nhub \nMulti-channel agents, CRM, reporting, \nexperimentation \n2,000–4,000+ setup + 500–\n1,000+/month  \n \nEngagement process \n•  \n1. Discovery \n• 30–60 minute call to understand the business model, current funnel, and \nmain constraints. \n• Basic assessment of whether AI agents and automation can realistically move \nrevenue, cost, or time. \n•  \n2. Proposal \n• Clear scope (what will be automated), timelines, and pricing; usually shared \nwithin a few days of the call. \n• Includes list of tools to be used and responsibilities (what the client needs to \nprovide: access, accounts, etc.). \n•  \n3. Build & implementation \n• Iterative build with tests in a staging or test environment before going live. \n• Weekly or bi-weekly check-ins until launch. \n•  \n4. Post-launch"
+        }
+      },
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 91,
+                "to": 100
+              }
+            }
+          },
+          "pageContent": "•  \n3. Build & implementation \n• Iterative build with tests in a staging or test environment before going live. \n• Weekly or bi-weekly check-ins until launch. \n•  \n4. Post-launch \n• 7–30 days of hyper-care (bug fixes, small tweaks) depending on the package. \n• Then it moves into a standard maintenance or growth retainer. \n \nRefund and cancellation policy (service-business friendly)"
+        }
+      },
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 102,
+                "to": 119
+              }
+            }
+          },
+          "pageContent": "This is a generic, service-style policy; adapt with a lawyer and local regulations in mind. \n• Strategy/discovery fees \n• Strategy calls, audits, and discovery workshops are non-refundable once \ndelivered, because the value is in time and expertise. \n• Project builds (fixed-fee work) \n• A non-refundable deposit (e.g., 30–50%) is paid to reserve the slot and start \nwork. \n• Remaining amount is typically due on milestone completion (e.g., after \napproval of key flows) or just before final delivery. \n• Refunds for project work are generally not offered after significant work is \ncompleted, but the company may choose to offer partial refunds or credits \ncase-by-case if the client stops early. \n• Retainers & subscriptions \n• Retainer payments are usually non-refundable for the current billing period, \nsince work capacity is reserved in advance. \n• Clients can cancel future months with written notice (e.g., 14–30 days before \nthe next billing date). \n• Performance / results"
+        }
+      },
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 116,
+                "to": 134
+              }
+            }
+          },
+          "pageContent": "since work capacity is reserved in advance. \n• Clients can cancel future months with written notice (e.g., 14–30 days before \nthe next billing date). \n• Performance / results \n• No guarantees of specific revenue or follower numbers; the company focuses \non best-effort implementation of agreed systems. \n• Where performance bonuses are agreed, they are paid on clearly defined, \nverifiable metrics (e.g., extra commission above a baseline). \n• Disputes \n• Clients should raise issues as soon as possible so they can be solved during \nthe engagement. \n• Any disputes that cannot be resolved informally may follow the escalation \nand governing-law clauses in the written agreement. \n \nSupport, SLAs, and communication \n• Channels \n• Support via email, shared Slack/Discord, or project management tools \n(Notion, ClickUp, etc.), depending on the plan. \n• Response times"
+        }
+      },
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 136,
+                "to": 156
+              }
+            }
+          },
+          "pageContent": "• Standard: responses in 24–48 business hours. \n• Premium retainers can include faster response windows (e.g., same-day or \nwithin 4 hours during business days). \n• Uptime & reliability \n• Uses reputable automation platforms and AI providers, but cannot guarantee \n100% uptime because third-party tools can fail. \n• Critical automations can include fallback/backup paths where feasible (e.g., \nbackup email if an API is down). \n \nData, privacy, and compliance \n• Data usage \n• Client data is only used to configure and run the agreed automations and \nagents. \n• Access to accounts and logs is limited to people working on the project. \n• Storage & retention \n• Conversation logs and workflow data may be stored in tools like n8n, \nspreadsheets, or CRMs as configured with the client. \n• Clients can request export or deletion of stored data within reasonable \ntechnical limits of the underlying tools. \n• Legal note \n• Clients remain responsible for their own compliance (e.g., GDPR/CCPA/email"
+        }
+      },
+      {
+        "json": {
+          "metadata": {
+            "source": "blob",
+            "blobType": "application/pdf",
+            "pdf": {
+              "version": "1.10.100",
+              "info": {
+                "PDFFormatVersion": "1.7",
+                "IsAcroFormPresent": false,
+                "IsXFAPresent": false,
+                "Author": "Srijon Lahiri",
+                "Creator": "Microsoft® Word 2019",
+                "Producer": "Microsoft® Word 2019",
+                "CreationDate": "D:20251204162422+05'30'",
+                "ModDate": "D:20251204162422+05'30'"
+              },
+              "metadata": {
+                "_metadata": {
+                  "pdf:producer": "Microsoft® Word 2019",
+                  "dc:creator": "Srijon Lahiri",
+                  "xmp:creatortool": "Microsoft® Word 2019",
+                  "xmp:createdate": "2025-12-04T16:24:22+05:30",
+                  "xmp:modifydate": "2025-12-04T16:24:22+05:30",
+                  "xmpmm:documentid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C",
+                  "xmpmm:instanceid": "uuid:D229047D-FFAD-4C3C-ABEA-50A6B1BFA32C"
+                }
+              },
+              "totalPages": 5
+            },
+            "loc": {
+              "lines": {
+                "from": 154,
+                "to": 157
+              }
+            }
+          },
+          "pageContent": "technical limits of the underlying tools. \n• Legal note \n• Clients remain responsible for their own compliance (e.g., GDPR/CCPA/email \nconsent) and must ensure their use of the systems follows local laws."
+        }
+      }
+    ],
+    "AI Agent": [
+      {
+        "json": {
+          "output": "Hello,\n\nThank you for reaching out to Literally AI Partners.\n\nI understand you have a question about the requirements for our partner program.\n\nBased on the information I have, our services include AI email and DM agents, AI voice agents and website widgets, automation and n8n workflows, and content and personal brand automations. We also offer strategy and consulting services. Our typical clients are personal brands, solo founders, creators, small agencies, and lean SaaS businesses.\n\nIf you could please clarify which specific aspect of the \"partner program\" you are interested in, I would be happy to provide more detailed information.\n\nBest regards,\n\nLiterally AI Partners Support Team"
+        }
+      }
+    ],
+    "Email Classifier": [
+      {
+        "json": {
+          "text": "SIMPLE"
+        }
+      }
+    ],
+    "Switch": [
+      {
+        "json": {
+          "text": "SIMPLE"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-11-13T21:46:18.626Z",
+      "updatedAt": "2025-11-13T21:46:18.626Z",
+      "role": "workflow:owner",
+      "workflowId": "WYO7zZIfIjXYjCUm",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-17T09:47:04.437Z",
+      "updatedAt": "2025-10-17T09:47:04.437Z",
+      "id": "m1LLrDd9GoIPBG1W",
+      "name": "all"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-09T18:03:36.000Z",
+  "versionId": "cda27baf-65d4-4657-8de0-5eb611c0ef35"
+}
