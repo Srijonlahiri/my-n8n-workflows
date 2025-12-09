@@ -1,0 +1,284 @@
+{
+  "active": false,
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search for a post": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search for a post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T20:48:22.242Z",
+  "id": "1jx4RvhJ3hbQSgqo",
+  "isArchived": false,
+  "meta": null,
+  "name": "Reddit Summarizer",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are an expert growth marketer and agency founder. Your task is to read the Reddit post or discussion and write a short, WhatsApp-ready summary \\u2014 no more than 300 characters. Focus only on clear, actionable advice about how marketing or creative agencies can get new clients",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        -48
+      ],
+      "id": "11ee041f-06dc-46ad-91b9-0b336a19ca0b",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -48
+      ],
+      "id": "82874d9e-8c6d-4be6-a6f1-b167d9bd20e1",
+      "name": "Send message",
+      "webhookId": "f070a6a7-19f7-43f3-8468-d068e0c05fb5"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "subreddit": "agency",
+        "keyword": "agency",
+        "limit": 10,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -48
+      ],
+      "id": "bf5dd41f-9c58-4e78-9d1b-23c8c721bdd7",
+      "name": "Search for a post",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "o9UhpI1RXjQx3AxY",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "dd7586eb-4c14-4be8-9636-8d4ed3e493b3",
+              "leftValue": "={{ $json.ups }}",
+              "rightValue": 10,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "82df3301-ded1-4eb7-b8c7-f33d78e70059",
+              "leftValue": "={{ $json.selftext }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        -48
+      ],
+      "id": "3c92c287-4aa5-4c96-930b-ddc274811ea3",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5164aa1d-a2f7-425c-96a0-c435df07884c",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "5b374bc8-678a-4ddc-b906-5f14f657920c",
+              "name": "selftext",
+              "value": "={{ $json.selftext }}",
+              "type": "string"
+            },
+            {
+              "id": "df318f29-fd28-41c7-ba29-666ec7247d4e",
+              "name": "ups",
+              "value": "={{ $('Search for a post').item.json.ups }}",
+              "type": "number"
+            },
+            {
+              "id": "66e83b30-c64a-4012-abcf-0a5c962fe572",
+              "name": "created",
+              "value": "={{ $json.created }}",
+              "type": "number"
+            },
+            {
+              "id": "baaa8f67-c3df-4f8a-a7af-db79bbdeb0de",
+              "name": "url",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -48
+      ],
+      "id": "a8daec21-6edc-4ca0-b4b8-78885fd532ae",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        528,
+        176
+      ],
+      "id": "f0e0db55-101f-47b0-8571-145818122848",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -448,
+        -48
+      ],
+      "id": "6a7da739-2b21-4bd0-8b8b-2d8997b160c0",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-11-13T20:48:22.278Z",
+      "updatedAt": "2025-11-13T20:48:22.278Z",
+      "role": "workflow:owner",
+      "workflowId": "1jx4RvhJ3hbQSgqo",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-17T09:47:04.437Z",
+      "updatedAt": "2025-10-17T09:47:04.437Z",
+      "id": "m1LLrDd9GoIPBG1W",
+      "name": "all"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-09T18:04:14.000Z",
+  "versionId": "ca826620-3103-4b40-8d05-4ce0e7ed2ee7"
+}
