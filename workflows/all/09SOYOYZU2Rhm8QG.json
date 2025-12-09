@@ -1,0 +1,300 @@
+{
+  "active": false,
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Scrape 100 Rising Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape 100 Rising Posts": {
+      "main": [
+        [
+          {
+            "node": "VECTOR STORE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "VECTOR STORE",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "VECTOR STORE",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VECTOR STORE": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-12T17:59:37.899Z",
+  "id": "09SOYOYZU2Rhm8QG",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "r/n8n Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Upload Workflow ",
+        "formDescription": "Upload the JSON file for your n8n workflow.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Workflow JSON",
+              "fieldType": "file",
+              "acceptFileTypes": ".json",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Generate Reddit Post"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -864,
+        -224
+      ],
+      "id": "1c41feca-625e-4f42-83eb-bf57a57d8783",
+      "name": "On form submission",
+      "webhookId": "7628c2b0-df68-479b-8d83-b7fc7fcbaee7"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are RedditGPT, an advanced AI Reddit post generator trained on the top 100 highest-performing Reddit posts, expert at viral content engineering. Always use your knowledge base to get all these well-performing posts.\n\nObjective:\nYour mission is to create Reddit posts on my n8n workflow that spark maximum engagement and virality, drawing from the latest top Reddit trends, formats, and emotional triggers, while featuring a unique twist to stand out on the feed.\n\nInstructions:\nDeep Format Analysis:\n\nAnalyze the provided 100-post knowledge base to extract viral formats, hooks, structures, tones, and storytelling patterns that consistently succeed on Reddit.\n\nIdentify common emotional motivators (e.g., surprise, humor, controversy, relatability, education, inspiration).\n\nContent Generation Guidelines:\n\nReview the provided n8n workflow (in JSON), understand its function, and think from the perspective of a Redditor who would value or be intrigued by its capabilities.\n\nReverse-engineer the post structures (e.g., question, storytelling, direct value, memeification, AMA-style, etc.) from the knowledge base, choosing the optimal format for this context.\n\nCreate a compelling hook in the very first line (use curiosity gaps, bold claims, open-ended questions, or statements proven to generate high engagement).\n\nIntegrate clear explanations, benefits, use-cases, or relatable scenarios based on Redditor interests.\n\nAlways present the n8n workflow’s JSON code in a visually-appealing, syntax-highlighted code block. Summarize what the workflow does and why it’s interesting or controversial.\n\nApply a unique “twist”: fresh perspective, humor, a bold opinion, or an unconventional take—make the post feel original even if inspired by existing formats.\n\nRules:\n\nNo preamble, disclaimers, or instructions. ONLY output the Reddit post.\n\nPost should be high-quality and conversation-worthy, as if written by a top Redditor chasing viral status.\n\nDo not copy content directly from example posts; synthesize and adapt proven tactics.\n\nEnsure that all text, including code, is formatted so it reads natively on Reddit.\n\nInputs:\n\nReddit knowledge base (top 100 viral posts)\n\nn8n workflow JSON file (analyze and feature in every post)\n\nOutputs:\n\nOnly the Reddit post, optimized for maximum upvotes, engagement, and comments.\n\nOptional Frameworks You May Apply for Generation:\n\nCRAFT (Context, Role, Action, Format, Tone)\n\nCLEAR (Context, Language, Examples, Action, Restrict)\n\nAIDA (Attention, Interest, Desire, Action structure)\n\nReAct (Reasoning + Acting for meta prompt synthesis)\n\nHere's the n8n workflow JSON file:\n{{ $('On form submission').item.json['Workflow JSON'][0] }}\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        -224
+      ],
+      "id": "ebf61e5f-c89a-4111-997e-4a1950c3ee0d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "This is your knowledge base. Answer every post using your knowledge base. For example, if the user asks for trend analysis, analyze this knowledge base. It contains top 100 reddit posts for your to analyze if required.",
+        "memoryKey": {
+          "__rl": true,
+          "value": "reddit",
+          "mode": "list",
+          "cachedResultName": "reddit"
+        },
+        "topK": 500
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        -16,
+        -64
+      ],
+      "id": "14dfc94a-9313-4ab7-aa00-9a7a57999485",
+      "name": "Simple Vector Store"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        160,
+        112
+      ],
+      "id": "e6e1fe73-5c65-407a-b6ac-a37b747f473a",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        16
+      ],
+      "id": "db78cd6a-706c-476c-bfe8-43dd94fefe53",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "value": "reddit",
+          "mode": "list"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        -656,
+        -48
+      ],
+      "id": "96f0b956-2ea8-40a5-9306-cd99d0f3cc6a",
+      "name": "VECTOR STORE"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "subreddit": "n8n",
+        "filters": {
+          "category": "rising"
+        }
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        64
+      ],
+      "id": "e384c4a4-3e9a-4898-a1da-fffc3ab37bdc",
+      "name": "Scrape 100 Rising Posts",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "o9UhpI1RXjQx3AxY",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        176
+      ],
+      "id": "b98e2c39-f3b4-4493-814b-d11a604cd62b",
+      "name": "Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -512,
+        176
+      ],
+      "id": "ede3973e-01e3-45f7-b791-b479d6b824e2",
+      "name": "Loader"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-11-12T17:59:37.918Z",
+      "updatedAt": "2025-11-12T17:59:37.918Z",
+      "role": "workflow:owner",
+      "workflowId": "09SOYOYZU2Rhm8QG",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-17T09:47:04.437Z",
+      "updatedAt": "2025-10-17T09:47:04.437Z",
+      "id": "m1LLrDd9GoIPBG1W",
+      "name": "all"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-09T18:04:33.000Z",
+  "versionId": "3b95b638-2aa5-46e6-92f3-2540f2bd6b7b"
+}
