@@ -1,0 +1,364 @@
+{
+  "active": false,
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Newsletter Summarizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute": {
+      "main": [
+        [
+          {
+            "node": "Newsletter Summarizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    ".": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Newsletter Summarizer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1️⃣ Pat Walls": {
+      "ai_tool": [
+        [
+          {
+            "node": "Newsletter Summarizer",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2️⃣ What The AI": {
+      "ai_tool": [
+        [
+          {
+            "node": "Newsletter Summarizer",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3️⃣ James Clear": {
+      "ai_tool": [
+        [
+          {
+            "node": "Newsletter Summarizer",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4️⃣ Dan Koe": {
+      "ai_tool": [
+        [
+          {
+            "node": "Newsletter Summarizer",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Newsletter Summarizer",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Newsletter Summarizer": {
+      "main": [
+        [
+          {
+            "node": "Notion",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-05T19:00:43.573Z",
+  "id": "rtUNj3bo6IohtSn3",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Newsletter Summary Report Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        64
+      ],
+      "id": "4fdaa857-d661-4433-b0bc-777a71010eb4",
+      "name": "Schedule"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -80
+      ],
+      "id": "8680cf41-6d6a-4eae-bfd6-ae46683cebf5",
+      "name": "Execute"
+    },
+    {
+      "parameters": {
+        "pageId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "blockUi": {
+          "blockValues": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        -64
+      ],
+      "id": "ec33239b-37dc-4bae-b13f-d8f510efa677",
+      "name": "Notion"
+    },
+    {
+      "parameters": {
+        "fromEmail": "lahirisrijon@gmail.com",
+        "toEmail": "lahirisrijon@gmail.com",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        848,
+        96
+      ],
+      "id": "67f13c40-8996-4a86-86e8-1359e46c9616",
+      "name": "Report",
+      "webhookId": "acf44b0d-8c6f-4db2-b6bd-d190b5b9e224"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        160,
+        224
+      ],
+      "id": "4c569879-af9b-4081-bb3a-75e969e42b4d",
+      "name": ".",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 10,
+        "filters": {
+          "labelIds": [],
+          "receivedAfter": "",
+          "receivedBefore": "",
+          "sender": "Pat Walls"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        384,
+        304
+      ],
+      "id": "73d86e12-cd18-4f3d-805c-e930a4da6713",
+      "name": "1️⃣ Pat Walls",
+      "webhookId": "4478fb39-522e-41b3-bc8e-840126b824bc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FywFx8HpSBKRYjsk",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 10,
+        "filters": {
+          "labelIds": [],
+          "receivedAfter": "",
+          "receivedBefore": "",
+          "sender": "What The AI"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        512,
+        320
+      ],
+      "id": "1fe6a898-e002-42ac-a0bc-4975df8ae99a",
+      "name": "2️⃣ What The AI",
+      "webhookId": "4478fb39-522e-41b3-bc8e-840126b824bc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FywFx8HpSBKRYjsk",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 10,
+        "filters": {
+          "labelIds": [],
+          "receivedAfter": "",
+          "receivedBefore": "",
+          "sender": "James Clear"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        752,
+        240
+      ],
+      "id": "e5a66d14-5faf-4216-a526-39c202e5bef3",
+      "name": "3️⃣ James Clear",
+      "webhookId": "4478fb39-522e-41b3-bc8e-840126b824bc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FywFx8HpSBKRYjsk",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 10,
+        "filters": {
+          "labelIds": [],
+          "receivedAfter": "",
+          "receivedBefore": "",
+          "sender": "Dan Koe"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        640,
+        304
+      ],
+      "id": "e4005156-cd33-4e5b-9957-299e04f55cc1",
+      "name": "4️⃣ Dan Koe",
+      "webhookId": "4478fb39-522e-41b3-bc8e-840126b824bc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FywFx8HpSBKRYjsk",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        272
+      ],
+      "id": "a323972c-a4d7-4299-968e-ec8f1e71670b",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        16
+      ],
+      "id": "c06d37d3-bac5-44f1-90b5-91d234d65bde",
+      "name": "Newsletter Summarizer"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-12-05T19:00:43.597Z",
+      "updatedAt": "2025-12-05T19:00:43.597Z",
+      "role": "workflow:owner",
+      "workflowId": "rtUNj3bo6IohtSn3",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-17T09:47:04.437Z",
+      "updatedAt": "2025-10-17T09:47:04.437Z",
+      "id": "m1LLrDd9GoIPBG1W",
+      "name": "all"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-09T18:03:10.000Z",
+  "versionId": "d900fccf-ce9e-46f8-9747-01d520341180"
+}
