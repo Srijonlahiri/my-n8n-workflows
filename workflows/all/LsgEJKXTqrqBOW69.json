@@ -1,0 +1,397 @@
+{
+  "active": false,
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Trend Analyzer + Reddit Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape 100 Rising Posts": {
+      "main": [
+        [
+          {
+            "node": "VECTOR STORE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "START": {
+      "main": [
+        [
+          {
+            "node": "Scrape 100 Rising Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "VECTOR STORE",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "VECTOR STORE",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini'": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Trend Analyzer + Reddit Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Trend Analyzer + Reddit Generator",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base": {
+      "ai_tool": [
+        [
+          {
+            "node": "Trend Analyzer + Reddit Generator",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini''": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-12T17:41:03.740Z",
+  "id": "LsgEJKXTqrqBOW69",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Reddit Analyzer + Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -512,
+        384
+      ],
+      "id": "5f7b344a-57eb-47ee-b701-3b9293f62c1f",
+      "name": "When chat message received",
+      "webhookId": "93ea2f1b-5d5e-46b1-acf5-6cab4dd05835"
+    },
+    {
+      "parameters": {
+        "content": "## Get 100 \"Rising\" Reddit Posts \n📊 PART 1: Reddit Data Scraper\n\n🎯 Purpose: Scrape top 100 rising Reddit posts from any subreddit and store them in a vector database for later analysis.\n\n🔧 Setup Steps:\n- Configure Reddit node with target subreddit\n- Set to fetch 100 \"Rising\" posts\n- Connect Gemini embeddings model\n- Link to vector store for persistence\n\n⚙️ Required:\n- Reddit API credentials (optional for public data)\n- Google Gemini API key\n- Vector database connection\n\n💡 Tip: Adjust subreddit and post count as needed. This runs on manual trigger via START node.",
+        "height": 768,
+        "width": 880,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1520,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "a23ddf80-2f01-4010-ba13-e75b27d1e073",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "value": "reddit",
+          "mode": "list"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        -1008,
+        256
+      ],
+      "id": "b6821e08-d81a-4df3-8cb7-0d3b56aeca31",
+      "name": "VECTOR STORE"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "subreddit": "n8n",
+        "filters": {
+          "category": "rising"
+        }
+      },
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [
+        -1232,
+        256
+      ],
+      "id": "ffb9c208-d118-4b26-8739-b8f7e627b915",
+      "name": "Scrape 100 Rising Posts",
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "o9UhpI1RXjQx3AxY",
+          "name": "Reddit account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1456,
+        256
+      ],
+      "id": "e72150e1-0f5c-434c-acdb-c77d0b26ce50",
+      "name": "START"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1088,
+        432
+      ],
+      "id": "da9fa0ea-28c8-4e19-8a37-fe3a2f55aeb9",
+      "name": "Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -880,
+        432
+      ],
+      "id": "4b62fabe-bd23-48c1-aaa6-49961da6f0c7",
+      "name": "Loader"
+    },
+    {
+      "parameters": {
+        "content": "## Ask Questions & Generate Viral Reddit Posts\n🤖 PART 2: AI-Powered Reddit Analyzer & Generator\n\n🎯 Purpose: Chat with your Reddit data! Ask questions to analyze trending topics, then generate viral Reddit posts based on the insights.\n\n🔧 Setup Steps:\n- Configure chat trigger node\n- Connect Gemini AI model as the brain\n- Add conversation memory for context\n- Link Knowledge Base tool to vector store\n- Set up embeddings for retrieval\n\n⚙️ Required:\n- Google Gemini API key (for AI model)\n- Same vector store from Part 1\n- Chat interface enabled\n\n💡 How to Use:\n- Click \"Open chat\" button\n- Ask questions like \"What topics are trending?\"\n- Request post generation: \"Write a viral post about [topic]\"\n- AI uses scraped data to provide insights",
+        "height": 1072,
+        "width": 832,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -608,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "3f6227ce-56ca-4e84-b126-56501dcd84c1",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        608
+      ],
+      "id": "68cec812-b46e-4592-ae4f-c29a5ce3fbfd",
+      "name": "Gemini'",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        608
+      ],
+      "id": "918cce76-c687-41f5-8c29-d9943e332ad6",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "This is your knowledge base. Answer every post using your knowledge base. For example, if the user asks for trend analysis, analyze this knowledge base. It contains top 100 reddit posts for your to analyze if required.",
+        "memoryKey": {
+          "__rl": true,
+          "value": "reddit",
+          "mode": "list",
+          "cachedResultName": "reddit"
+        },
+        "topK": 500
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        -96,
+        608
+      ],
+      "id": "d001cbf5-d527-491f-811f-3a1445700c50",
+      "name": "Knowledge Base"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        32,
+        752
+      ],
+      "id": "dbda04f0-af7d-4d28-8d9f-5e0c3c21b5ad",
+      "name": "Gemini''",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N2tPHTJSoXa5noXE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "To improve your AI agent’s system prompt using proven prompt engineering frameworks and Reddit content writing strategies, here’s an enhanced version—and reasoning based on prompt engineering best practices, persona prompting research, and Reddit post templates:\n\nImproved System Prompt:\n\nYou are an advanced Reddit analyzer and post writer.\n\nRoles:\nAct as both a critical analyzer (presenting evidence—direct quotes/proofs from your knowledge base, and referencing general info/context as needed) and a high-performing Reddit post creator.\n\nWriting Directions:\nWhen creating Reddit posts:\n\nUse hook formats and intro styles drawn from exemplars in your knowledge base.\n\nSelect or remix leading post templates/hooks for each topic (try question, bold statement, or scenario openers). Add your own creative twist to make hooks stand out.\n\nWrite in a casual, human, and conversational tone.\n\nAvoid robotic, generic, or jargon-filled language—use relatable, simple sentences, and real-world references.\n\nReference frameworks and templates, but adapt for context and audience.\n\nAnalysis Directions:\n\nWhen analyzing, always show proofs (for example, quote lines or direct evidence from your database).\n\nWhen helpful, provide additional general or background info.\n\nStyle & Output:\nMake responses clear, detailed, and authentically human—avoid clichés and overused phrases.\nStrive for original, vivid hooks, and structure posts following viral Reddit formats but with your personal touch.\nIf instructions are ambiguous, reformulate the user’s question for clarity before responding.\n\nPersona and User Context:\nRemember: You’re a helpful, witty, and insightful agent, focused on producing posts that resonate on Reddit.\nThe user is building an AI agent for workflow automation and viral social content.\n\nRule: Use your knowledge base every time containing top 100 rising posts. Only go for the text-based posts."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -288,
+        384
+      ],
+      "id": "e7280e19-4d75-46ae-aaae-ce311c8ecdf2",
+      "name": "Trend Analyzer + Reddit Generator"
+    },
+    {
+      "parameters": {
+        "content": "📜 WORKFLOW OVERVIEW\n\n🔄 Two-Part System:\n1️⃣ Data Collection (Green): Scrapes Reddit posts and stores in vector DB\n2️⃣ AI Analysis (Red): Chat interface to analyze data and generate posts\n\n🚀 Quick Start:\n1. Run Part 1 first (click Execute on START node)\n2. Wait for scraping to complete (~30-60 sec)\n3. Open chat and start asking questions\n4. AI retrieves from vector store automatically\n\n📈 Workflow Logic:\nScrape → Embed → Store → Retrieve → Analyze → Generate\n\n⏱️ Best Practice: Re-run Part 1 daily to keep data fresh",
+        "height": 352,
+        "width": 832
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        928
+      ],
+      "id": "b66acd70-4968-403f-8102-8b7c3fab225e",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "🔑 API KEYS & CREDENTIALS REQUIRED\n\n1️⃣ Google Gemini API Key (FREE):\n   • Get from: ai.google.dev\n   • Used for: Embeddings + AI Model\n   • Configure in: All Gemini nodes\n\n2️⃣ Reddit API (Optional):\n   • Public posts work without auth\n   • For private/restricted: reddit.com/prefs/apps\n   • Configure in: Reddit node\n\n3️⃣ Vector Database:\n   • Built-in n8n vector store used\n   • No external setup needed\n   • Data persists between runs\n\n🚨 Security: Store API keys in n8n credentials, never hardcode!",
+        "height": 656,
+        "width": 336
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        624
+      ],
+      "id": "898c084b-497d-4e3c-97d9-6e0cb7b522e1",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "🎯 USE CASES & EXAMPLE QUERIES\n\n💬 Chat Examples:\n• \"What are the top trending topics?\"\n• \"Summarize the most engaging posts\"\n• \"What questions do users ask most?\"\n• \"Find posts about [specific topic]\"\n• \"Write a viral post about AI trends\"\n• \"Generate a post that will get upvotes\"\n\n💡 Ideal For:\n• Content creators finding viral topics\n• Marketers analyzing trends\n• Community managers understanding sentiment\n• Researchers gathering insights\n• Anyone wanting to create engaging content\n\n🔄 Workflow: Ask → AI analyzes data → Get insights → Generate content",
+        "height": 656,
+        "width": 512
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1520,
+        624
+      ],
+      "id": "2dc7965e-0ea0-4d59-94ee-741766aaaeed",
+      "name": "Sticky Note4"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-11-12T17:41:03.760Z",
+      "updatedAt": "2025-11-12T17:41:03.760Z",
+      "role": "workflow:owner",
+      "workflowId": "LsgEJKXTqrqBOW69",
+      "projectId": "pU2j9nE4cp6SFzch"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-17T09:47:04.437Z",
+      "updatedAt": "2025-10-17T09:47:04.437Z",
+      "id": "m1LLrDd9GoIPBG1W",
+      "name": "all"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-09T18:04:41.000Z",
+  "versionId": "db547acc-8765-4e2a-9c69-bce0dae965e9"
+}
