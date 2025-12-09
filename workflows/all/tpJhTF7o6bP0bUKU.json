@@ -1,5 +1,5 @@
 {
-  "active": true,
+  "active": false,
   "connections": {
     "/": {
       "main": [
@@ -791,6 +791,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-10-17T10:02:12.000Z",
+  "updatedAt": "2025-12-09T18:05:42.000Z",
   "versionId": "87b0c621-831c-47ae-951b-8b6dea8f50c4"
 }
